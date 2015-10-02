@@ -1,0 +1,5 @@
+{
+	"name": "charts-barchart",
+	"template": "./template.hbs",
+	"errorTemplate": "./error.hbs"
+}
