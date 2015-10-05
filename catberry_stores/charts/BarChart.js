@@ -21,6 +21,13 @@ BarChart.prototype.$lifetime = 60000;
  * @returns {Promise<Object>|Object|null|undefined} Loaded data.
  */
 BarChart.prototype.load = function () {
-	// Here you can do any HTTP requests using this._uhr.
-	// Please read details here https://github.com/catberry/catberry-uhr.
+	return [
+		{name: "Jhon",	   value: 1},
+		{name: "Locke",    value: 10},
+		{name: "Reyes",    value: 100},
+		{name: "Ford",     value: 1000},
+		{name: "Jarrah",   value: 10000},
+		{name: "Shephard", value: 100000},
+		{name: "Kwon",     value: 900000}
+	];
 };

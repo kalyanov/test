@@ -1,6 +1,9 @@
 {
-	"title": "Catberry Project",
+	"title": "Catberry Project Env",
 	"server": {
 		"port": 3000
+	},
+	"assets": {
+		"useNormalizeCss": true
 	}
 }

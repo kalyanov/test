@@ -3,13 +3,14 @@
 var isRelease = process.argv.length === 3 ?
 		process.argv[2] === 'release' : undefined,
 	templateEngine = require('catberry-handlebars'),
-	catberry = require('catberry'),
 	assets = require('catberry-assets'),
-	cat = catberry.create({isRelease: isRelease});
+	catberry = require('catberry'),
+	//TODO: fix config loading
+	config = require('./config/environment'),
+	cat = catberry.create(config);
 
-// register plugins to the service locator
+config.isRelease = isRelease === undefined ? config.isRelease : isRelease;
+
 assets.register(cat.locator);
 templateEngine.register(cat.locator);
-
-// now we can build a Catberry bundle
 cat.build();
