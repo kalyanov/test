@@ -21,13 +21,40 @@ BarChart.prototype.$lifetime = 60000;
  * @returns {Promise<Object>|Object|null|undefined} Loaded data.
  */
 BarChart.prototype.load = function () {
-	return [
-		{name: "Jhon",	   value: 1},
-		{name: "Locke",    value: 10},
-		{name: "Reyes",    value: 100},
-		{name: "Ford",     value: 1000},
-		{name: "Jarrah",   value: 10000},
-		{name: "Shephard", value: 100000},
-		{name: "Kwon",     value: 900000}
-	];
+	var statistics = [{
+			date: '2015-09-01',
+			shows: 1,
+			clicks: 0
+		}, {
+			date: '2015-09-02',
+			shows: 10,
+			clicks: 1
+		}, {
+			date: '2015-09-03',
+			shows: 100,
+			clicks: 1
+		}, {
+			date: '2015-09-04',
+			shows: 1000,
+			clicks: 700
+		}, {
+			date: '2015-09-05',
+			shows: 10000,
+			clicks: 1
+		}, {
+			date: '2015-09-06',
+			shows: 100000,
+			clicks: 1
+		}, {
+			date: '2015-09-07',
+			shows: 900000,
+			clicks: 100000
+		}];
+
+	return statistics.map(function (item) {
+		item.ctr =  parseFloat(item.clicks / item.shows * 100).toFixed(2);
+		item.clicks =  item.clicks || .9;
+		item.shows =  item.shows || .9;
+		return item;
+	});
 };

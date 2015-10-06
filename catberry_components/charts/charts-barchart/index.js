@@ -51,8 +51,8 @@ ChartsBarchart.prototype._drawChart = function (data) {
 		height = 500 - margin.top - margin.bottom;
 
 	var x = d3.scale.ordinal()
-		.rangeRoundBands([0, width], .1)
-		.domain(data.map(function(d) { return d.name; }));
+		.rangeRoundBands([0, width], .3, .1)
+		.domain(data.map(function(d) { return d.date; }));
 
 	var getMaxNearestRoundValue = function (val) {
 		var max = 1;
@@ -62,7 +62,7 @@ ChartsBarchart.prototype._drawChart = function (data) {
 		return max;
 	};
 
-	var yMax = d3.max(data, function(d) { return d.value; });
+	var yMax = d3.max(data, function(d) { return d.shows; });
 
 	var y = d3.scale.log()
 		.range([height, 0])
@@ -70,36 +70,52 @@ ChartsBarchart.prototype._drawChart = function (data) {
 
 	var xAxis = d3.svg.axis()
 		.scale(x)
-		.orient("bottom");
+		.orient('bottom');
 
 	var yAxis = d3.svg.axis()
 		.scale(y)
-		.ticks(10, d3.format("0,.0f"))
-		.orient("left");
+		.ticks(10, d3.format('0,.0f'))
+		.orient('left');
 
-	var chart = d3.select(".barchart")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var chart = d3.select('.barchart')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append('g')
+		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-	chart.append("g")
-		.attr("class", "barchart__axis barchart__axis--x")
-		.attr("transform", "translate(0," + height + ")")
+	chart.append('g')
+		.classed('barchart__axis barchart__axis--x', true)
+		.attr('transform', 'translate(0,' + height + ')')
 		.call(xAxis);
 
-	chart.append("g")
-		.attr("class", "barchart__axis barchart__axis--y")
+	chart.append('g')
+		.classed('barchart__axis barchart__axis--y', true)
 		.call(yAxis);
 
-	chart.selectAll(".barchart__bar")
+	var barsWrap = chart.append('g')
+		.classed('barchart__bars-wrap', true);
+
+	var barGroup = barsWrap.selectAll('g')
 		.data(data)
-		.enter().append("rect")
-		.attr("class", "barchart__bar")
-		.attr("x", function(d) { return x(d.name); })
-		.attr("y", function(d) { return y(d.value); })
-		.attr("height", function(d) { return height - y(d.value); })
-		.attr("width", x.rangeBand());
+		.enter().append('g')
+		.attr('class', 'barchart__bar-group')
+		.attr('transform', function(d) { return 'translate(' + x(d.date) + ', 0)'});
+
+	barGroup.selectAll('rect')
+		.data(function(d) { return [
+			{value: d.shows, type: 'shows'},
+			{value: d.clicks, type: 'clicks'}
+		]})
+		.enter().append('rect')
+		.attr('class', function(d) {
+			return 'barchart__bar barchart__bar--' + d.type;
+		})
+		.attr('x', function(d) {
+			return d.type === 'clicks' ? x.rangeBand() / 2 + 1 : 0;
+		})
+		.attr('y', function(d) { return y(d.value); })
+		.attr('height', function(d) { return height - y(d.value); })
+		.attr('width', x.rangeBand() / 2 - 1 );
 }
 
 
